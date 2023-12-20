@@ -15,19 +15,11 @@ jobs:
     steps:
       - name: "List all simulators"
         run: "xcrun xctrace list devices"
-      - name: Start Simulator
-        run: |
-          # Fetch the UDID of the specified simulator device
-          UDID=$(xcrun xctrace list devices | grep -E "(${{ matrix.device }})" | sed -En 's/.* \(([-0-9A-F]+)\) .*$/\1/p')
-          echo "Found UDID: $UDID"
+      - name: Boot iOS Simulator
+        run: xcrun simctl boot "iPhone 14 Pro Max"
 
-          # Boot the simulator using the retrieved UDID
-          if [ -z "$UDID" ]; then
-            echo "No simulator with the name '${{ matrix.device }}' found"
-            exit 1
-          else
-            xcrun simctl boot "$UDID"
-          fi
+      - name: Wait for Simulator to Boot
+        run: sleep 30
       - name: "Checkout"
         uses: actions/checkout@v2
       - name: "Setup Flutter"
@@ -37,8 +29,6 @@ jobs:
       - run: flutter pub get
       - run: flutter test test/unit/ --flavor development
       - run: flutter test test/widget/ --flavor development
-      - name: Launch iOS Simulator
-        run: open -a Simulator
       - run: flutter test --flavor development integration_test
 
   # deployDev:
