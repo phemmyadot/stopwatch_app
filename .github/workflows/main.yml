@@ -23,6 +23,8 @@ jobs:
         uses: subosito/flutter-action@v1
         with:
           flutter-version: "3.16.4"
+      - name: Launch iOS Simulator
+        run: open -a Simulator
       - run: flutter pub get
       - run: flutter test test/unit/ --flavor development
       - run: flutter test test/widget/ --flavor development
