@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:stopwatch_app/environment.dart';
+import 'package:stopwatch_app/utils/app_colors.dart';
 import 'package:stopwatch_app/widgets/app_bar.dart';
 import 'package:stopwatch_app/widgets/stopwatch_controls.dart';
 import 'package:stopwatch_app/widgets/stopwatch_display.dart';
@@ -64,6 +65,16 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           const SizedBox(height: 30),
           buildTimeDisplay(currentTime),
+          if (laps.isNotEmpty) const SizedBox(height: 16),
+          if (laps.isNotEmpty)
+            Container(
+                margin: const EdgeInsets.symmetric(horizontal: 24),
+                child: Text('Completed laps: ${laps.length}',
+                    textAlign: TextAlign.left,
+                    style: const TextStyle(
+                        color: AppColors.primaryTextColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16))),
           const SizedBox(height: 40),
           buildControlButtons(
               isRunning: isRunning,

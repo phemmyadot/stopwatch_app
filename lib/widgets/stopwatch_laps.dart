@@ -19,6 +19,7 @@ Widget buildLapItem(int index, List<int> laps) {
       elevation: 1,
       child: ListTile(
           title: Text('Lap ${laps.length - index}',
+              key: Key('lap_item_$index'),
               style: const TextStyle(
                   color: AppColors.primaryTextColor,
                   fontWeight: FontWeight.bold,
