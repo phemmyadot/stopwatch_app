@@ -16,18 +16,7 @@ jobs:
       - name: "List all simulators"
         run: "xcrun xctrace list devices"
       - name: Start Simulator
-        run: |
-          # Fetch the UDID of the latest iPhone simulator device
-          UDID=$(xcrun xctrace list devices | grep -E "iPhone" | grep -E "(Booted|Shutdown|Creating)" | sort -r | head -n 1 | awk '{print $NF}')
-          echo "Found UDID of the latest iPhone simulator: $UDID"
-
-          # Boot the simulator using the retrieved UDID
-          if [ -z "$UDID" ]; then
-            echo "No iPhone simulator found"
-            exit 1
-          else
-            xcrun simctl boot "$UDID"
-          fi
+        run: xcrun simctl boot "iPhone 14 Pro Max"
       - name: Wait for Simulator to Boot
         run: sleep 30
       - name: "Checkout"
@@ -41,33 +30,40 @@ jobs:
       - run: flutter test test/widget/ --flavor development
       - run: flutter test --flavor development integration_test
 
-  # deployDev:
-  #   name: Deploy to Development
-  #   if: github.event.ref == 'refs/heads/develop'
-  #   runs-on: macos-latest
-  #   environment:
-  #     name: development
-  #   steps:
-  #     - name: "Checkout"
-  #       uses: actions/checkout@v2
-  #     - name: "Setup Java"
-  #       uses: actions/setup-java@v1
-  #       with:
-  #         java-version: "12.x"
-  #     - name: "Setup Flutter"
-  #       uses: subosito/flutter-action@v1
-  #       with:
-  #         flutter-version: "3.16.4"
-  #     - run: flutter pub get
-  #     - run: flutter test test/unit/ --flavor development
-  #     - run: flutter test test/widget/ --flavor development
-  #     - run: flutter test --flavor development integration_test
-  #     - run: flutter build apk --release --flavor development --split-per-abi
-  #     - name: "Upload APK"
-  #       uses: actions/upload-artifact@v2
-  #       with:
-  #         name: apk-release
-  #         path: build/app/outputs/flutter-apk/app-release.apk
+  deploy_android_dev:
+    name: Deploy to Development
+    if: github.event.ref == 'refs/heads/develop'
+    runs-on: macos-latest
+    environment:
+      name: development
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+      - name: "Setup Java"
+        uses: actions/setup-java@v1
+        with:
+          java-version: "12.x"
+      - name: "Setup Flutter"
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: "3.16.4"
+      - run: flutter pub get
+      - run: flutter build apk --release --flavor development --split-per-abi
+      - name: Sign App Bundle
+        uses: r0adkll/sign-android-release@v1
+        id: sign_app
+        with:
+        releaseDirectory: build/app/outputs/bundle/release/
+        signingKeyBase64: ${{ secrets.ANDROID_KEYSTORE_FILE_BASE64 }}
+        alias: ${{ secrets.ANDROID_SIGNING_KEY_ALIAS }}
+        keyStorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+
+        keyPassword: ${{ secrets.ANDROID_SIGNING_KEY_PASSWORD }}
+      - name: "Upload APK"
+        uses: actions/upload-artifact@v2
+        with:
+          name: apk-release
+          path: build/app/outputs/flutter-apk/app-release.apk
   # deployStaging:
   #   name: Deploy to Staging
   #   if: github.event.ref == 'refs/heads/staging'
