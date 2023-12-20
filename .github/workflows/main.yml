@@ -180,12 +180,12 @@ jobs:
         with:
           flutter-version: "3.16.4"
       - run: flutter pub get
-      - run: flutter build ios --release --flavor development --no-codesign --target=lib/main_development.dart
+      - run: flutter build ipa --release --flavor development --no-codesign --target=lib/main_development.dart
       - name: "Upload iOS App"
         uses: actions/upload-artifact@v2
         with:
           name: ipa-release
-          path: build/ios/iphoneos/Runner.app
+          path: build/ios/ipa/stopwatch_app.ipa
       - name: Clean up keychain and provisioning profile
         if: ${{ always() }}
         run: |
@@ -231,12 +231,12 @@ jobs:
         with:
           flutter-version: "3.16.4"
       - run: flutter pub get
-      - run: flutter build ios --release --flavor staging --no-codesign --target=lib/main_staging.dart
+      - run: flutter build ipa --release --flavor staging --no-codesign --target=lib/main_staging.dart
       - name: "Upload iOS App"
         uses: actions/upload-artifact@v2
         with:
           name: ipa-release
-          path: build/ios/iphoneos/Runner.app
+          path: build/ios/ipa/stopwatch_app.ipa
       - name: Clean up keychain and provisioning profile
         if: ${{ always() }}
         run: |
@@ -282,12 +282,12 @@ jobs:
         with:
           flutter-version: "3.16.4"
       - run: flutter pub get
-      - run: flutter build ios --release --flavor production --no-codesign --target=lib/main_production.dart
+      - run: flutter build ipa --release --flavor production --no-codesign --target=lib/main_production.dart
       - name: "Upload iOS App"
         uses: actions/upload-artifact@v2
         with:
           name: ipa-release
-          path: build/ios/iphoneos/Runner.app
+          path: build/ios/ipa/stopwatch_app.ipa
       - name: Clean up keychain and provisioning profile
         if: ${{ always() }}
         run: |
