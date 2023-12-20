@@ -11,15 +11,15 @@ flutter pub get
 
 ## For dev environment:
 
-flutter run --flavor development
+flutter run --flavor development --target=lib/main_development.dart
 
 ## For staging environment:
 
-flutter run --flavor staging
+flutter run --flavor staging --target=lib/main_development.dart
 
 ## For production environment:
 
-flutter run --flavor production
+flutter run --flavor production --target=lib/main_development.dart
 
 # Running Tests
 
