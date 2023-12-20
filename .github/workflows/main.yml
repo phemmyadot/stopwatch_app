@@ -1,0 +1,91 @@
+name: Deployments
+on:
+  pull_request:
+    branches: [master, develop, staging]
+  push:
+    branches: [master, develop, staging]
+name: Build and Release
+
+jobs:
+  deployDev:
+    name: Deploy to Development
+    if: github.event.ref == 'refs/heads/develop'
+    runs-on: macos-latest
+    environment: 
+      name: development
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+      - name: "Setup Java"
+        uses: actions/setup-java@v1
+        with:
+          java-version: "12.x"
+      - name: "Setup Flutter"
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: "3.16.4"
+      - run: flutter pub get
+      - run: flutter test test/unit/ --flavor development
+      - run: flutter test test/widget/ --flavor development
+      - run: flutter test --flavor development integration_test
+      - run: flutter build apk --release --flavor development --split-per-abi
+      - name: "Upload APK"
+        uses: actions/upload-artifact@v2
+        with:
+          name: apk-release
+          path: build/app/outputs/flutter-apk/app-release.apk
+  deployStaging:
+    name: Deploy to Staging
+    if: github.event.ref == 'refs/heads/staging'
+    runs-on: macos-latest
+    environment: 
+      name: staging
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+      - name: "Setup Java"
+        uses: actions/setup-java@v1
+        with:
+          java-version: "12.x"
+      - name: "Setup Flutter"
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: "3.16.4"
+      - run: flutter pub get
+      - run: flutter test test/unit/ --flavor staging
+      - run: flutter test test/widget/ --flavor staging
+      - run: flutter test --flavor staging integration_test
+      - run: flutter build apk --release --flavor staging --split-per-abi
+      - name: "Upload APK"
+        uses: actions/upload-artifact@v2
+        with:
+          name: apk-release
+          path: build/app/outputs/flutter-apk/app-release.apk
+  deployProd:
+    name: Deploy to Production
+    if: github.event.ref == 'refs/heads/master'
+    runs-on: macos-latest
+    environment: 
+      name: production
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+      - name: "Setup Java"
+        uses: actions/setup-java@v1
+        with:
+          java-version: "12.x"
+      - name: "Setup Flutter"
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: "3.16.4"
+      - run: flutter pub get
+      - run: flutter test test/unit/ --flavor production
+      - run: flutter test test/widget/ --flavor production
+      - run: flutter test --flavor production integration_test
+      - run: flutter build apk --release --flavor production --split-per-abi
+      - name: "Upload APK"
+        uses: actions/upload-artifact@v2
+        with:
+          name: apk-release
+          path: build/app/outputs/flutter-apk/app-release.apk
+    
