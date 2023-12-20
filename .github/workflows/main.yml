@@ -13,12 +13,18 @@ jobs:
     environment:
       name: development
     steps:
+      - name: "List all simulators"
+        run: "xcrun xctrace list devices"
+      - name: "Start Simulator"
+        # the command "xcrun simctl boot" expects a device identifier
+        # the assignment of the UDID variable consists of retrieving the ID of the simulator
+        # by extracting it from the command "xcrun xctrace list devices"
+        run: |
+          UDID=$(xcrun xctrace list devices | grep "^${{ matrix.device }}" | awk '{gsub(/[()]/,""); print $NF}')
+          echo $UDID
+          xcrun simctl boot "${UDID:?No Simulator with this name found}"
       - name: "Checkout"
         uses: actions/checkout@v2
-      - name: "Setup Java"
-        uses: actions/setup-java@v1
-        with:
-          java-version: "12.x"
       - name: "Setup Flutter"
         uses: subosito/flutter-action@v1
         with:
