@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:stopwatch_app/environment.dart';
 import 'package:stopwatch_app/screens/stopwatch_screen.dart';
 import 'package:integration_test/integration_test.dart';
 
 void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  AppEnvironment.setEnvironment(Flavor.DEV);
+
   testWidgets('Stopwatch integration test', (WidgetTester tester) async {
     await tester.pumpWidget(const MaterialApp(home: StopwatchScreen()));
     await tester.pump(const Duration(seconds: 2));

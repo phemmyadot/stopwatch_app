@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:stopwatch_app/environment.dart';
 import '../utils/app_colors.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -17,7 +16,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       title: Text(
-        AppEnvironment.title,
+        title,
         style: const TextStyle(
           fontSize: 24,
           color: AppColors.primaryTextColor,

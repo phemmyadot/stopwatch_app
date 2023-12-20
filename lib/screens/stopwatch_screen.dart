@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:stopwatch_app/environment.dart';
 import 'package:stopwatch_app/widgets/app_bar.dart';
 import 'package:stopwatch_app/widgets/stopwatch_controls.dart';
 import 'package:stopwatch_app/widgets/stopwatch_display.dart';
@@ -57,7 +58,7 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const CustomAppBar(title: 'Stopwatch'),
+        appBar: CustomAppBar(title: AppEnvironment.title),
         body: SafeArea(
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [

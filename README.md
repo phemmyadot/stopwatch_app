@@ -1,16 +1,42 @@
-# stopwatch_app
+# Running the App
 
-A new Flutter project.
+Ensure Flutter SDK is Installed:
+If not installed, follow the Flutter installation guide(https://docs.flutter.dev/get-started/install)
 
-## Getting Started
+# Get Dependencies:
 
-This project is a starting point for a Flutter application.
+flutter pub get
 
-A few resources to get you started if this is your first Flutter project:
+# Run the App:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## For dev environment:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+flutter run --flavor development
+
+## For staging environment:
+
+flutter run --flavor staging
+
+## For production environment:
+
+flutter run --flavor production
+
+# Running Tests
+
+## Unit Tests
+
+flutter test test/unit/ --flavor development
+
+## Widget Tests
+
+flutter test test/widget/ --flavor development
+
+## Integration Tests
+
+flutter test --flavor development integration_test
+
+<!-- or -->
+
+flutter drive \
+ --driver=test_driver/integration_test.dart \
+ --target=integration_test/stopwatch_integration_test.dart --flavor development

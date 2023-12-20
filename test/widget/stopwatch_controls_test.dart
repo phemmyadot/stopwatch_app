@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stopwatch_app/app.dart';
+import 'package:stopwatch_app/environment.dart';
 import 'package:stopwatch_app/widgets/stopwatch_controls.dart';
 
 void main() {
+  AppEnvironment.setEnvironment(Flavor.DEV);
   testWidgets('StopwatchControls shows all buttons when not running',
       (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(

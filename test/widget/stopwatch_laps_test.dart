@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:stopwatch_app/environment.dart';
 import 'package:stopwatch_app/widgets/stopwatch_laps.dart';
 
 void main() {
+  AppEnvironment.setEnvironment(Flavor.DEV);
   testWidgets('StopwatchLaps shows empty list message initially',
       (WidgetTester tester) async {
     await tester
