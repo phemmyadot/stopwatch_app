@@ -5,6 +5,31 @@ on:
   push:
     branches: [main, development, staging]
 
+jobs:
+  build_and_test_dev:
+    name: Build and Test Development
+    if: github.event.ref == 'refs/heads/development'
+    runs-on: macos-latest
+    environment:
+      name: development
+    steps:
+      - name: "List all simulators"
+        run: "xcrun xctrace list devices"
+      - name: Start Simulator
+        run: xcrun simctl boot "iPhone 14 Pro Max"
+      - name: Wait for Simulator to Boot
+        run: sleep 30
+      - name: "Checkout"
+        uses: actions/checkout@v2
+      - name: "Setup Flutter"
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: "3.16.4"
+      - run: flutter pub get
+      - run: flutter test test/unit/ --flavor development
+      - run: flutter test test/widget/ --flavor development
+      - run: flutter test --flavor development integration_test
+
   deploy_android_dev:
     name: Deploy to Development
     if: github.event.ref == 'refs/heads/development'
@@ -14,6 +39,19 @@ on:
     steps:
       - name: "Checkout"
         uses: actions/checkout@v2
+      - name: Get version.txt
+        uses: actions/download-artifact@v2
+        with:
+          name: gitversion
+      - name: Create new file without newline char from version.txt
+        run: tr -d '\n' < version.txt > version1.txt
+      - name: Read version
+        id: version
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: version1.txt
+      - name: Update version in YAML
+        run: sed -i 's/99.99.99+99/${{ steps.version.outputs.content }}+${{ github.run_number }}/g' pubspec.yaml
       - name: Download Android keystore
         id: android_keystore
         uses: timheuer/base64-to-file@v1.0.3
