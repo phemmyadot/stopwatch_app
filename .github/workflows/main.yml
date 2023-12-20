@@ -65,7 +65,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: apk-release
-          path: build/app/outputs/flutter-apk/app-release.aab
+          path: build/app/outputs/bundle/developmentRelease/app-development-release.aab
 
   deploy_android_staging:
     name: Deploy Android to Staging
@@ -102,7 +102,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: apk-release
-          path: build/app/outputs/flutter-apk/app-release.aab
+          path: build/app/outputs/bundle/stagingRelease/app-staging-release.aab
 
   deploy_android_main:
     name: Deploy Android to Production
@@ -139,7 +139,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: apk-release
-          path: build/app/outputs/flutter-apk/app-release.aab
+          path: build/app/outputs/bundle/productionRelease/app-production-release.aab
 
   deploy_ios_dev:
     name: Deploy iOS to Development
