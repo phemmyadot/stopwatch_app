@@ -15,9 +15,19 @@ jobs:
     steps:
       - name: "List all simulators"
         run: "xcrun xctrace list devices"
-      - name: Boot iOS Simulator
-        run: xcrun simctl boot "iPhone 14 Pro Max"
+      - name: Start Simulator
+        run: |
+          # Fetch the UDID of the latest iPhone simulator device
+          UDID=$(xcrun xctrace list devices | grep -E "iPhone" | grep -E "(Booted|Shutdown|Creating)" | sort -r | head -n 1 | awk '{print $NF}')
+          echo "Found UDID of the latest iPhone simulator: $UDID"
 
+          # Boot the simulator using the retrieved UDID
+          if [ -z "$UDID" ]; then
+            echo "No iPhone simulator found"
+            exit 1
+          else
+            xcrun simctl boot "$UDID"
+          fi
       - name: Wait for Simulator to Boot
         run: sleep 30
       - name: "Checkout"
