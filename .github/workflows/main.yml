@@ -1,9 +1,9 @@
 name: Deployments
 on:
   pull_request:
-    branches: [master, develop, staging]
+    branches: [main, develop, staging]
   push:
-    branches: [master, develop, staging]
+    branches: [main, develop, staging]
 
 jobs:
   deployDev:
@@ -62,7 +62,7 @@ jobs:
           path: build/app/outputs/flutter-apk/app-release.apk
   deployProd:
     name: Deploy to Production
-    if: github.event.ref == 'refs/heads/master'
+    if: github.event.ref == 'refs/heads/main'
     runs-on: macos-latest
     environment:
       name: production
