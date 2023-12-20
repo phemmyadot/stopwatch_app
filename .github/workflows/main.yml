@@ -15,14 +15,19 @@ jobs:
     steps:
       - name: "List all simulators"
         run: "xcrun xctrace list devices"
-      - name: "Start Simulator"
-        # the command "xcrun simctl boot" expects a device identifier
-        # the assignment of the UDID variable consists of retrieving the ID of the simulator
-        # by extracting it from the command "xcrun xctrace list devices"
+      - name: Start Simulator
         run: |
-          UDID=$(xcrun xctrace list devices | grep "^${{ matrix.device }}" | awk '{gsub(/[()]/,""); print $NF}')
-          echo $UDID
-          xcrun simctl boot "${UDID:?No Simulator with this name found}"
+          # Fetch the UDID of the specified simulator device
+          UDID=$(xcrun xctrace list devices | grep -E "(${{ matrix.device }})" | sed -En 's/.* \(([-0-9A-F]+)\) .*$/\1/p')
+          echo "Found UDID: $UDID"
+
+          # Boot the simulator using the retrieved UDID
+          if [ -z "$UDID" ]; then
+            echo "No simulator with the name '${{ matrix.device }}' found"
+            exit 1
+          else
+            xcrun simctl boot "$UDID"
+          fi
       - name: "Checkout"
         uses: actions/checkout@v2
       - name: "Setup Flutter"
