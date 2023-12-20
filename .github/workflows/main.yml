@@ -30,6 +30,29 @@ jobs:
       - run: flutter test test/widget/ --flavor development
       - run: flutter test --flavor development integration_test
 
+  create_version_number_dev:
+    name: Create version number
+    if: github.event.ref == 'refs/heads/development'
+    runs-on: ubuntu-latest
+    environment:
+      name: development
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.7
+        with:
+          versionSpec: "5.x"
+      - name: Use GitVersion
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.7
+      - name: Create version.txt with nuGetVersion
+        run: echo ${{ steps.gitversion.outputs.nuGetVersion  }} > version.txt
+      - name: Upload version.txt
+        uses: actions/upload-artifact@v2
+        with:
+          name: gitversion
+          path: version.txt
+
   deploy_android_dev:
     name: Deploy to Development
     if: github.event.ref == 'refs/heads/development'
