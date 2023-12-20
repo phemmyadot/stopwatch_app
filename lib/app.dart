@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stopwatch_app/screens/stopwatch_screen.dart';
 
-void main() {
-  runApp(const StopwatchApp());
-}
-
 class StopwatchApp extends StatelessWidget {
   const StopwatchApp({super.key});
 

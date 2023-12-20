@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stopwatch_app/main.dart';
+import 'package:stopwatch_app/app.dart';
 import 'package:stopwatch_app/widgets/stopwatch_controls.dart';
 
 void main() {

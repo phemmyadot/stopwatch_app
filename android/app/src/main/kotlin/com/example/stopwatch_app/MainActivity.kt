@@ -1,4 +1,4 @@
-package com.example.stopwatch_app
+package com.fma.stopwatch_app
 
 import io.flutter.embedding.android.FlutterActivity
 
