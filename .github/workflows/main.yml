@@ -4,14 +4,13 @@ on:
     branches: [master, develop, staging]
   push:
     branches: [master, develop, staging]
-name: Build and Release
 
 jobs:
   deployDev:
     name: Deploy to Development
     if: github.event.ref == 'refs/heads/develop'
     runs-on: macos-latest
-    environment: 
+    environment:
       name: development
     steps:
       - name: "Checkout"
@@ -38,7 +37,7 @@ jobs:
     name: Deploy to Staging
     if: github.event.ref == 'refs/heads/staging'
     runs-on: macos-latest
-    environment: 
+    environment:
       name: staging
     steps:
       - name: "Checkout"
@@ -65,7 +64,7 @@ jobs:
     name: Deploy to Production
     if: github.event.ref == 'refs/heads/master'
     runs-on: macos-latest
-    environment: 
+    environment:
       name: production
     steps:
       - name: "Checkout"
@@ -88,4 +87,3 @@ jobs:
         with:
           name: apk-release
           path: build/app/outputs/flutter-apk/app-release.apk
-    
