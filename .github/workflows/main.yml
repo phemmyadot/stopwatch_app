@@ -48,7 +48,6 @@ jobs:
         with:
           flutter-version: "3.16.4"
       - run: flutter pub get
-      - run: flutter build apk --release --flavor development --split-per-abi --target=lib/main_development.dart
       - name: Sign App Bundle
         uses: r0adkll/sign-android-release@v1
         id: sign_app
@@ -58,6 +57,7 @@ jobs:
           alias: ${{ secrets.ANDROID_SIGNING_KEY_ALIAS }}
           keyStorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           keyPassword: ${{ secrets.ANDROID_SIGNING_KEY_PASSWORD }}
+      - run: flutter build apk --release --flavor development --split-per-abi --target=lib/main_development.dart
       - name: "Upload APK"
         uses: actions/upload-artifact@v2
         with:
