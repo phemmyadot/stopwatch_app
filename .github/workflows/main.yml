@@ -8,7 +8,6 @@ on:
 jobs:
   build_and_test_dev:
     name: Build and Test Development
-    if: github.event.ref == 'refs/heads/development'
     runs-on: macos-latest
     environment:
       name: development
@@ -29,6 +28,52 @@ jobs:
       - run: flutter test test/unit/ --flavor development
       - run: flutter test test/widget/ --flavor development
       - run: flutter test --flavor development integration_test
+
+  build_and_test_staging:
+    name: Build and Test Staging
+    runs-on: macos-latest
+    environment:
+      name: staging
+    steps:
+      - name: "List all simulators"
+        run: "xcrun xctrace list devices"
+      - name: Start Simulator
+        run: xcrun simctl boot "iPhone 14 Pro Max"
+      - name: Wait for Simulator to Boot
+        run: sleep 30
+      - name: "Checkout"
+        uses: actions/checkout@v2
+      - name: "Setup Flutter"
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: "3.16.4"
+      - run: flutter pub get
+      - run: flutter test test/unit/ --flavor staging
+      - run: flutter test test/widget/ --flavor staging
+      - run: flutter test --flavor staging integration_test
+
+  build_and_test_main:
+    name: Build and Test Production
+    runs-on: macos-latest
+    environment:
+      name: production
+    steps:
+      - name: "List all simulators"
+        run: "xcrun xctrace list devices"
+      - name: Start Simulator
+        run: xcrun simctl boot "iPhone 14 Pro Max"
+      - name: Wait for Simulator to Boot
+        run: sleep 30
+      - name: "Checkout"
+        uses: actions/checkout@v2
+      - name: "Setup Flutter"
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: "3.16.4"
+      - run: flutter pub get
+      - run: flutter test test/unit/ --flavor production
+      - run: flutter test test/widget/ --flavor production
+      - run: flutter test --flavor production integration_test
 
   deploy_android_dev:
     name: Deploy Android to Development
