@@ -39,6 +39,19 @@ jobs:
     steps:
       - name: "Checkout"
         uses: actions/checkout@v2
+      - name: Get version.txt
+        uses: actions/download-artifact@v2
+        with:
+          name: gitversion
+      - name: Create new file without newline char from version.txt
+        run: tr -d '\n' < version.txt > version1.txt
+      - name: Read version
+        id: version
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: version1.txt
+      - name: Update version in YAML
+        run: sed -i 's/99.99.99+99/${{ steps.version.outputs.content }}+${{ github.run_number }}/g' pubspec.yaml
       - name: Download Android keystore
         id: android_keystore
         uses: timheuer/base64-to-file@v1.0.3
@@ -60,7 +73,7 @@ jobs:
         with:
           flutter-version: "3.16.4"
       - run: flutter pub get
-      - run: flutter build appbundle --release --flavor development --split-per-abi --target=lib/main_development.dart
+      - run: flutter build appbundle --release --flavor development --target=lib/main_development.dart
       - name: "Upload App Bundle"
         uses: actions/upload-artifact@v2
         with:
