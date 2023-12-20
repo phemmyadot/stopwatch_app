@@ -39,7 +39,6 @@
                 "--target",
                 "lib/main_production.dart"
             ],
-            "flutterMode": "release"
         }
     ]
 }
