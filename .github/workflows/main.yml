@@ -39,6 +39,18 @@ jobs:
     steps:
       - name: "Checkout"
         uses: actions/checkout@v2
+      - name: Download Android keystore
+        id: android_keystore
+        uses: timheuer/base64-to-file@v1.0.3
+        with:
+          fileName: upload-keystore.jks
+          encodedString: ${{ secrets.ANDROID_KEYSTORE_FILE_BASE64 }}
+      - name: Create key.properties
+        run: |
+          echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" > android/key.properties
+          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
+          echo "keyPassword=${{ secrets.ANDROID_SIGNING_KEY_PASSWORD }}" >> android/key.properties
+          echo "keyAlias=${{ secrets.ANDROID_SIGNING_KEY_ALIAS }}" >> android/key.properties
       - name: "Setup Java"
         uses: actions/setup-java@v1
         with:
@@ -48,21 +60,12 @@ jobs:
         with:
           flutter-version: "3.16.4"
       - run: flutter pub get
-      - name: Sign App Bundle
-        uses: r0adkll/sign-android-release@v1
-        id: sign_app
-        with:
-          releaseDirectory: build/app/outputs/bundle/release/
-          signingKeyBase64: ${{ secrets.ANDROID_KEYSTORE_FILE_BASE64 }}
-          alias: ${{ secrets.ANDROID_SIGNING_KEY_ALIAS }}
-          keyStorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          keyPassword: ${{ secrets.ANDROID_SIGNING_KEY_PASSWORD }}
-      - run: flutter build apk --release --flavor development --split-per-abi --target=lib/main_development.dart
-      - name: "Upload APK"
+      - run: flutter build appbundle --release --flavor development --split-per-abi --target=lib/main_development.dart
+      - name: "Upload App Bundle"
         uses: actions/upload-artifact@v2
         with:
           name: apk-release
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: build/app/outputs/flutter-apk/app-release.aab
   # deployStaging:
   #   name: Deploy to Staging
   #   if: github.event.ref == 'refs/heads/staging'
