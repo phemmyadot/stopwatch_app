@@ -228,7 +228,7 @@ jobs:
         with:
           flutter-version: "3.16.4"
       - run: flutter pub get
-      - run: flutter build ipa --release --flavor development --target=lib/main_development.dart
+      - run: flutter build ipa --release --flavor development --target=lib/main_development.dart --export-options-plist=ExportOptions.plist
       - name: "Upload iOS App"
         uses: actions/upload-artifact@v2
         with:
@@ -279,7 +279,7 @@ jobs:
         with:
           flutter-version: "3.16.4"
       - run: flutter pub get
-      - run: flutter build ipa --release --flavor staging --target=lib/main_staging.dart
+      - run: flutter build ipa --release --flavor staging --target=lib/main_staging.dart --export-options-plist=ExportOptions.plist
       - name: "Upload iOS App"
         uses: actions/upload-artifact@v2
         with:
@@ -330,7 +330,7 @@ jobs:
         with:
           flutter-version: "3.16.4"
       - run: flutter pub get
-      - run: flutter build ipa --release --flavor production --target=lib/main_production.dart
+      - run: flutter build ipa --release --flavor production --target=lib/main_production.dart --export-options-plist=ExportOptions.plist
       - name: "Upload iOS App"
         uses: actions/upload-artifact@v2
         with:
