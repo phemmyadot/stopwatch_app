@@ -7,13 +7,15 @@ void main() {
   AppEnvironment.setEnvironment(Flavor.DEV);
   testWidgets('StopwatchDisplay shows initial time correctly',
       (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(home: buildTimeDisplay(0)));
+    await tester
+        .pumpWidget(const MaterialApp(home: StopwatchDisplay(currentTime: 0)));
     expect(find.text('00:00:00'), findsOneWidget);
   });
 
   testWidgets('StopwatchDisplay shows updated time correctly',
       (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(home: buildTimeDisplay(120)));
+    await tester.pumpWidget(
+        const MaterialApp(home: StopwatchDisplay(currentTime: 120)));
     expect(find.text('00:02:00'), findsOneWidget);
   });
 }

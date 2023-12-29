@@ -9,7 +9,7 @@ void main() {
   testWidgets('StopwatchControls shows all buttons when not running',
       (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
-        home: buildControlButtons(
+        home: ControlButtons(
       isRunning: false,
       startStopwatch: () {},
       stopStopwatch: () {},
@@ -25,7 +25,7 @@ void main() {
       'StopwatchControls shows stop, reset and lap buttons when running',
       (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
-        home: buildControlButtons(
+        home: ControlButtons(
       isRunning: true,
       startStopwatch: () {},
       stopStopwatch: () {},
